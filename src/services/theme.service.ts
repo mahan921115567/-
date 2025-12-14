@@ -25,9 +25,9 @@ export class ThemeService {
       if (isPlatformBrowser(this.platformId)) {
         localStorage.setItem('saraf_theme', currentTheme);
         if (currentTheme === 'dark') {
-          document.body.classList.add('dark');
+          document.documentElement.classList.add('dark');
         } else {
-          document.body.classList.remove('dark');
+          document.documentElement.classList.remove('dark');
         }
       }
     });
