@@ -1,0 +1,35 @@
+
+<div class="bg-[#f9f9f9] border border-[#d3d3d3] rounded-[3px] shadow-sm p-3 w-fit min-w-[300px] flex items-center justify-between select-none mx-auto my-4 transition-all hover:bg-white">
+    <div class="flex items-center gap-3">
+       <!-- Checkbox Area -->
+       <div 
+         (click)="verify()" 
+         class="w-[28px] h-[28px] border-[2px] rounded-[2px] bg-white flex items-center justify-center cursor-pointer transition-all relative overflow-hidden"
+         [class.border-[#c1c1c1]]="state() === 'unchecked'"
+         [class.hover:border-[#b2b2b2]]="state() === 'unchecked'"
+         [class.border-transparent]="state() !== 'unchecked'">
+            
+            @if (state() === 'loading') {
+                <div class="w-full h-full rounded-full border-[3px] border-[#d3d3d3] border-t-blue-500 animate-spin"></div>
+            }
+            
+            @if (state() === 'checked') {
+                <svg class="w-full h-full text-[#469038] scale-110" viewBox="0 0 46 46" fill="none">
+                    <path fill="currentColor" d="M21.5 35.5L9.5 23.5L12.5 20.5L21.5 29.5L40.5 10.5L43.5 13.5L21.5 35.5Z"/>
+                </svg>
+            }
+       </div>
+       <span class="text-[14px] font-medium text-[#282828] font-sans">من ربات نیستم</span>
+    </div>
+ 
+    <!-- Logo Area -->
+    <div class="flex flex-col items-center justify-center text-[10px] text-[#555] gap-[2px]">
+       <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" class="w-8 h-8 opacity-70" alt="reCAPTCHA">
+       <span class="text-[9px]">reCAPTCHA</span>
+       <div class="text-[8px] text-[#999] space-x-1 flex">
+          <span class="hover:underline cursor-pointer">Privacy</span>
+          <span>-</span>
+          <span class="hover:underline cursor-pointer">Terms</span>
+       </div>
+    </div>
+ </div>

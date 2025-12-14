@@ -1,0 +1,53 @@
+
+<form (ngSubmit)="handleRegister()" class="flex flex-col space-y-6">
+  <h2 class="text-2xl font-bold text-center text-pink-400">ایجاد حساب کاربری جدید</h2>
+
+  <!-- Username Input -->
+  <div class="flex flex-col">
+    <label for="username-register" class="mb-2 font-semibold text-gray-300">نام کاربری:</label>
+    <input 
+      id="username-register"
+      type="text"
+      [(ngModel)]="username"
+      name="username"
+      required
+      class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none"
+      placeholder="یک نام کاربری انتخاب کنید">
+  </div>
+
+  <!-- Password Input -->
+  <div class="flex flex-col">
+    <label for="password-register" class="mb-2 font-semibold text-gray-300">رمز عبور:</label>
+    <input 
+      id="password-register"
+      type="password"
+      [(ngModel)]="password"
+      name="password"
+      required
+      class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none"
+      placeholder="یک رمز عبور قوی انتخاب کنید">
+  </div>
+  
+  <!-- Captcha -->
+  <app-captcha (verified)="onCaptchaVerify($event)"></app-captcha>
+
+  <!-- Action Button -->
+  <button 
+    type="submit"
+    [disabled]="!username() || !password() || !isCaptchaVerified()"
+    class="w-full py-3 rounded-lg font-bold text-lg text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-pink-600 hover:bg-pink-700">
+    ثبت نام
+  </button>
+
+  <!-- Status Message -->
+  @if (status(); as s) {
+    <div 
+      class="p-3 rounded-lg text-center font-semibold"
+      [class.bg-green-500/20]="s.success"
+      [class.text-green-400]="s.success"
+      [class.bg-red-500/20]="!s.success"
+      [class.text-red-400]="!s.success">
+      {{ s.message }}
+    </div>
+  }
+</form>

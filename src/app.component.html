@@ -1,0 +1,144 @@
+
+@if (showLanding()) {
+    <app-landing (start)="enterApp()"></app-landing>
+} @else {
+    @if(isNewUser()) {
+      <app-welcome (dismiss)="dismissWelcome()"></app-welcome>
+    }
+
+    <!-- Notifications are available everywhere when logged in -->
+    <app-notifications></app-notifications>
+
+    <div class="min-h-screen bg-gray-900 text-white flex flex-col items-center p-4 sm:p-6 font-sans relative overflow-x-hidden">
+      <!-- Ambient Background -->
+      <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+         <div class="absolute -top-[20%] -right-[10%] w-[700px] h-[700px] bg-cyan-600/10 rounded-full blur-[120px]"></div>
+         <div class="absolute top-[40%] -left-[10%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[120px]"></div>
+      </div>
+
+      <div class="w-full max-w-4xl mx-auto relative z-10">
+        
+        @if (currentUser()) {
+          <!-- Main App View (Logged In) -->
+          @if (isAdmin()) {
+            <app-admin-panel></app-admin-panel>
+          } @else {
+            <!-- Regular User View -->
+            <div>
+              <header class="text-center mb-8 relative">
+                <h1 class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400 drop-shadow-sm font-mono tracking-wider">SARAF</h1>
+                <p class="text-gray-400 mt-2 font-light">
+                  خوش آمدید، <span class="font-bold text-white">{{ currentUser()?.username }}</span>
+                </p>
+                <button (click)="logout()" class="absolute top-0 left-0 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 py-1.5 px-4 rounded-2xl text-sm transition-all backdrop-blur-md">
+                  خروج
+                </button>
+              </header>
+
+              <nav class="flex justify-center bg-gray-800/40 backdrop-blur-xl border border-white/5 rounded-3xl p-1.5 mb-8 shadow-2xl overflow-x-auto whitespace-nowrap">
+                <button
+                  (click)="setView('prices')"
+                  [class.bg-gray-700/80]="currentView() === 'prices'"
+                  [class.text-white]="currentView() === 'prices'"
+                  [class.shadow-lg]="currentView() === 'prices'"
+                  class="flex-1 min-w-[80px] py-3 px-4 rounded-2xl text-center font-semibold transition-all duration-300 text-gray-400 hover:text-white">
+                  قیمت‌ها
+                </button>
+                <button
+                  (click)="setView('buy')"
+                  [class.bg-cyan-600]="currentView() === 'buy'"
+                  [class.text-white]="currentView() === 'buy'"
+                  [class.shadow-lg]="currentView() === 'buy'"
+                  [class.shadow-cyan-500/30]="currentView() === 'buy'"
+                  class="flex-1 min-w-[80px] py-3 px-4 rounded-2xl text-center font-semibold transition-all duration-300 text-gray-400 hover:text-white mx-1 sm:mx-2">
+                  خرید
+                </button>
+                <button
+                  (click)="setView('sell')"
+                  [class.bg-pink-600]="currentView() === 'sell'"
+                  [class.text-white]="currentView() === 'sell'"
+                  [class.shadow-lg]="currentView() === 'sell'"
+                  [class.shadow-pink-500/30]="currentView() === 'sell'"
+                  class="flex-1 min-w-[80px] py-3 px-4 rounded-2xl text-center font-semibold transition-all duration-300 text-gray-400 hover:text-white">
+                  فروش
+                </button>
+                <button
+                  (click)="setView('wallet')"
+                  [class.bg-gray-700/80]="currentView() === 'wallet'"
+                  [class.text-white]="currentView() === 'wallet'"
+                  [class.shadow-lg]="currentView() === 'wallet'"
+                  class="flex-1 min-w-[80px] py-3 px-4 rounded-2xl text-center font-semibold transition-all duration-300 text-gray-400 hover:text-white mx-1 sm:mx-2">
+                  کیف پول
+                </button>
+                <button
+                  (click)="setView('history')"
+                  [class.bg-gray-700/80]="currentView() === 'history'"
+                  [class.text-white]="currentView() === 'history'"
+                  [class.shadow-lg]="currentView() === 'history'"
+                  class="flex-1 min-w-[80px] py-3 px-4 rounded-2xl text-center font-semibold transition-all duration-300 text-gray-400 hover:text-white">
+                  تاریخچه
+                </button>
+              </nav>
+
+              <main class="bg-gray-800/30 backdrop-blur-2xl border border-white/5 p-6 sm:p-8 rounded-[40px] shadow-2xl relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+                <div class="relative z-10">
+                  @switch (currentView()) {
+                    @case ('prices') { <app-price-list></app-price-list> }
+                    @case ('buy') { <app-trade mode="buy"></app-trade> }
+                    @case ('sell') { <app-trade mode="sell"></app-trade> }
+                    @case ('wallet') { <app-wallet></app-wallet> }
+                    @case ('history') { <app-history></app-history> }
+                  }
+                </div>
+              </main>
+              <footer class="text-center mt-8 text-gray-500 text-sm font-light">
+                  <p>© 2024 SARAF Exchange</p>
+              </footer>
+            </div>
+          }
+        } @else {
+          <!-- Auth View (Logged Out) -->
+          <div class="w-full max-w-md mx-auto animate-fade-in">
+             <!-- Back to Landing -->
+             <button (click)="showLanding.set(true)" class="mb-4 text-gray-400 hover:text-white flex items-center gap-1 text-sm bg-white/5 px-3 py-1.5 rounded-full border border-white/5 backdrop-blur-sm transition-all">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                 بازگشت به خانه
+             </button>
+
+            <header class="text-center mb-8">
+              <h1 class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400 font-mono tracking-wide">SARAF</h1>
+              <p class="text-gray-400 mt-2 font-light">برای شروع وارد شوید یا حساب جدید بسازید</p>
+            </header>
+
+            <nav class="flex justify-center bg-gray-800/40 backdrop-blur-xl border border-white/5 rounded-3xl p-1.5 mb-8 shadow-xl">
+              <button
+                (click)="setAuthView('login')"
+                [class.bg-cyan-600]="authView() === 'login'"
+                [class.shadow-lg]="authView() === 'login'"
+                [class.shadow-cyan-500/20]="authView() === 'login'"
+                class="flex-1 py-3 px-4 rounded-2xl text-center font-semibold transition-all duration-300 text-gray-400 hover:text-white">
+                ورود
+              </button>
+              <button
+                (click)="setAuthView('register')"
+                [class.bg-pink-600]="authView() === 'register'"
+                [class.shadow-lg]="authView() === 'register'"
+                [class.shadow-pink-500/20]="authView() === 'register'"
+                class="flex-1 py-3 px-4 rounded-2xl text-center font-semibold transition-all duration-300 text-gray-400 hover:text-white mx-2">
+                ثبت نام
+              </button>
+            </nav>
+
+            <main class="bg-gray-800/30 backdrop-blur-2xl border border-white/5 p-8 rounded-[40px] shadow-2xl">
+              @switch (authView()) {
+                @case ('login') { <app-login></app-login> }
+                @case ('register') { <app-register (registerSuccess)="setAuthView('login')"></app-register> }
+              }
+            </main>
+          </div>
+        }
+
+      </div>
+    </div>
+}
