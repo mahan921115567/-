@@ -12,6 +12,7 @@ import { AdminPanelComponent } from './components/admin/admin-panel.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { HistoryComponent } from './components/history/history.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
+import { ThemeService } from './services/theme.service';
 
 type View = 'prices' | 'buy' | 'sell' | 'wallet' | 'history';
 type AuthView = 'login' | 'register';
@@ -24,6 +25,7 @@ type AuthView = 'login' | 'register';
 })
 export class AppComponent {
   private authService = inject(AuthService);
+  themeService = inject(ThemeService); // Made public for template access
   
   currentView = signal<View>('prices');
   authView = signal<AuthView>('login');

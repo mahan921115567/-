@@ -3,6 +3,7 @@ import { Component, ChangeDetectionStrategy, output, inject, computed } from '@a
 import { CommonModule } from '@angular/common';
 import { CryptoService } from '../../services/crypto.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-landing',
@@ -14,6 +15,7 @@ export class LandingComponent {
   start = output<void>();
   private cryptoService = inject(CryptoService);
   private sanitizer = inject(DomSanitizer);
+  themeService = inject(ThemeService);
 
   cryptos = this.cryptoService.cryptos;
 
